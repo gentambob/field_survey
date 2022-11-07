@@ -56,7 +56,7 @@ def cluster_map(c, groups):
     cdplot=cd.copy()
     cdplot.geometry=project_gdf(cdplot).buffer(100).to_crs(cd.crs).geometry
     cdplot=pd.concat([cd, cdplot])
-    folc=cdplot.explore("kind", categorical=True, cmap="Set1", legend=True)
+    folc=cdplot.explore("kind", categorical=True, cmap="Paired", legend=True)
     return folc, cd
 
 if st.button("clear cache"):

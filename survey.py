@@ -45,7 +45,7 @@ def data_all():
         datp.at[index, "cluster"]="box"#+str(i)
 
 
-    fol=datp.explore("cluster", categorical=True, cmap="prism", legend=True)
+    fol=datp.explore("cluster", categorical=True, cmap="tab20", legend=True)
     return data, fol, groups
 data, fol, groups=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)

@@ -54,7 +54,7 @@ def cluster_map(c, groups):
     folc=cd.explore("kind", categorical=True, cmap="jet", legend=True)
     return folc, cd
 
-if st.bottom("clear cache"):
+if st.button("clear cache"):
     from streamlit import caching
     caching.clear_cache()
 c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())

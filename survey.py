@@ -51,7 +51,7 @@ data, fol, groups=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def cluster_map(c, groups):
     cd=groups.get_group(c)
-    folc=cd.explore()
+    folc=cd.explore(color="red")
     return folc, cd
 
 
@@ -65,5 +65,6 @@ routes=googlerouting (
     [["x", "y"]].sort_values(["x","y"]
      ))
 st.write(routes)
-st.markdown("""--all map-""")
+st.markdown("""-----""")
+st.title("all map")
 folium_static(fol)

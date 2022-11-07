@@ -52,7 +52,7 @@ data, fol, groups=data_all()
 def cluster_map(c, groups):
     cd=groups.get_group(c)
     cdplot=cd.copy()
-    cdplot.geometry=cdplot.geometry.buffer(0.00031)
+    cdplot.geometry=cdplot.geometry.buffer(0.0031)
     folc=cd.explore("kind", categorical=True, cmap="prism_r", legend=True)
     return folc, cd
 

@@ -45,13 +45,13 @@ def data_all():
         datp.at[index, "cluster"]="box"#+str(i)
 
 
-    fol=datp.explore("cluster", categorical=True, cmap="flag", legend=True)
+    fol=datp.explore("cluster", categorical=True, cmap="Set1", legend=True)
     return data, fol, groups
 data, fol, groups=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def cluster_map(c, groups):
     cd=groups.get_group(c)
-    folc=cd.explore("kind", categorical=True, cmap="Set1", legend=True)
+    folc=cd.explore("kind", categorical=True, cmap="flag", legend=True)
     return folc, cd
 
 

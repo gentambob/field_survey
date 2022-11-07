@@ -47,11 +47,15 @@ def data_all():
 
     fol=datp.explore("cluster", categorical=True, cmap="prism")
     return data, fol, groups
-data, fol, groups=data()
+data, fol, groups=data_all()
 st.title("Zore grid and unsure survey points")
+@st.cache(suppress_st_warning=True,allow_output_mutation=True)
 c=st.sidebar.selectbox("cluster (targets)",  list(data["cluster"]))
-cd=groups.get_group(c)
-folc=cd.explore()
+def cluster_map(c):
+    cd=groups.get_group(c)
+    folc=cd.explore()
+    return folc
+folc=cluster_map(c)
 folium_static(folc)
 folium_static(fol)
 routes=googlerouting (

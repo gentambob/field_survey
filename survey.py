@@ -12,6 +12,7 @@ from streamlit_folium import folium_static
 import shapely
 from sklearn.cluster import SpectralClustering
 from osmnx.projection import project_gdf
+import pandas as pd
 def googlerouting (df_plans):
     otw=df_plans.head(len(df_plans)-1).to_numpy()
     final=df_plans.tail(1).to_numpy()[0]

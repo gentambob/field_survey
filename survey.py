@@ -55,8 +55,7 @@ def cluster_map(c, groups):
     return folc, cd
 
 if st.button("clear cache"):
-    from streamlit import caching
-    caching.clear_cache()
+   st.experimental_singleton.clear()
 c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
 folc, cd=cluster_map(c, groups)
 st.title(f"Zore grid and unsure survey points for cluster {c}")

@@ -42,10 +42,10 @@ def data_all():
     for i, d in enumerate(boxs):
         index=len(datp)+1
         datp.at[index, "geometry"]=d.exterior
-        datp.at[index, "cluster"]="box"+str(i)
+        datp.at[index, "cluster"]="box"#+str(i)
 
 
-    fol=datp.explore("cluster", categorical=True, cmap="prism")
+    fol=datp.explore("cluster", categorical=True, cmap="prism", legend=True)
     return data, fol, groups
 data, fol, groups=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)

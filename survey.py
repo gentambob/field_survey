@@ -54,10 +54,10 @@ def cluster_map(c, groups):
     folc=cd.explore()
     return folc, cd
 
-    
+
 c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
 folc, cd=cluster_map(c, groups)
-st.title("Zore grid and unsure survey points")
+st.title(f"Zore grid and unsure survey points for cluster {c}")
 folium_static(folc)
 
 routes=googlerouting (
@@ -65,5 +65,5 @@ routes=googlerouting (
     [["x", "y"]].sort_values(["x","y"]
      ))
 st.write(routes)
-st.markdown("""---""")
+st.markdown("""--all map-""")
 folium_static(fol)

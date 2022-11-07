@@ -52,14 +52,18 @@ data, fol, groups=data_all()
 def cluster_map(c, groups):
     cd=groups.get_group(c)
     folc=cd.explore()
-    return folc
+    return folc, cd
+
+    
 c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
-folc=cluster_map(c, groups)
+folc, cd=cluster_map(c, groups)
 st.title("Zore grid and unsure survey points")
 folium_static(folc)
-folium_static(fol)
+
 routes=googlerouting (
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
 st.write(routes)
+st.markdown("""---""")
+folium_static(fol)

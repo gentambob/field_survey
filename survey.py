@@ -11,6 +11,7 @@ import streamlit as st
 from streamlit_folium import folium_static
 import shapely
 from sklearn.cluster import SpectralClustering
+from osmnx.projection import project_gdf
 def googlerouting (df_plans):
     otw=df_plans.head(len(df_plans)-1).to_numpy()
     final=df_plans.tail(1).to_numpy()[0]
@@ -52,7 +53,8 @@ data, fol, groups=data_all()
 def cluster_map(c, groups):
     cd=groups.get_group(c)
     cdplot=cd.copy()
-    cdplot.geometry=cdplot.geometry.buffer(0.0031)
+    cdplot.geometry=project_gdf(cdplot).buffer(100).to_crs(cd.crs).geometry
+    cdplot=pd.concat([cd, cdplot])
     folc=cdplot.explore("kind", categorical=True, cmap="prism_r", legend=True)
     return folc, cd
 

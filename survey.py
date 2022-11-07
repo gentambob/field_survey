@@ -51,7 +51,7 @@ data, fol, groups=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def cluster_map(c, groups):
     cd=groups.get_group(c)
-    folc=cd.explore(color="red")
+    folc=cd.explore("kind", categorical=True, cmap="prism", legend=True)
     return folc, cd
 
 

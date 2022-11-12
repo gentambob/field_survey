@@ -59,9 +59,9 @@ def cluster_map(c, groups):
     folc=cdplot.explore("kind", categorical=True, cmap="Set1", legend=True)
     return folc, cd
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)    
-def write_form(place):
+def write_form():
     form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="640" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
-    place.markdown(form, unsafe_allow_html=True)
+    st.markdown(form, unsafe_allow_html=True)
 left, space1, s,right=st.columns(4)
 genre = right.radio("Mode",('cluster', 'all map'))
 if  left.button("clear cache"):
@@ -81,7 +81,7 @@ if genre == "cluster":
     st.markdown("""-----""")
     satu, dua, tiga=st.columns(3)
     if dua.button("show input form"):
-        write_form(place=dua)
+        write_form()
 if genre =="all map":
     st.title("all map")
     folium_static(fol)

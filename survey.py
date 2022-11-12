@@ -84,7 +84,7 @@ if genre == "cluster":
             folium_static(folc)
     plac1=st.empty()
     left1, space1, righ1=plac1.columns([1,5,1])
-    with space1.expander("routes"):
+    with left1.expander("routes"):
         for i, v in routes[1].items():
             st.write(f"[link to index {i}]({v})")
             st.write(f"[link all routes]({routes[0]})")

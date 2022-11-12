@@ -85,8 +85,7 @@ if genre == "cluster":
     plac1=st.empty()
     left1, space1, righ1=plac1.columns([0.85,1,4])
     with space1.expander("routes"):
-        st.write(f"[link all routes]({routes[0]})")
-        st.write(routes[1])
+        st.write(f"🗃[link all routes]({routes[0]})")
         for i, v in routes[1].items():
             st.write(f"[link to index {i}]({v})")
     place2=st.empty()

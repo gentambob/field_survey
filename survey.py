@@ -81,7 +81,7 @@ if genre == "cluster":
     with st.expander("<strong>map</strong>", True):
         with st.container():
             folium_static(folc)
-    with st.expander("<strong>routes</strong>"):
+    with st.expander(r"<strong>routes</strong>"):
         left, center, right=st.columns([2,2,1])
         for i, v in routes[1].items():
             center.write(f"[link to index {i}]({v})")

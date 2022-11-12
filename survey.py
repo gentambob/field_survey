@@ -58,21 +58,26 @@ def cluster_map(c, groups):
     cdplot=pd.concat([cd, cdplot])
     folc=cdplot.explore("kind", categorical=True, cmap="Set1", legend=True)
     return folc, cd
+left, space1, s,right=st.columns(4)
+genre = right.radio("Mode",('cluster', 'all map', "input"))
+if  left.button("clear cache"):
+    st.experimental_singleton.clear()
 
-if st.button("clear cache"):
-   st.experimental_singleton.clear()
-c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
-folc, cd=cluster_map(c, groups)
-st.title(f"Zore grid and unsure survey points for cluster {c}")
-folium_static(folc)
-
-routes=googlerouting (
+if genre == "cluster":
+    c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
+    folc, cd=cluster_map(c, groups)
+    st.title(f"Zore grid and unsure survey points for cluster {c}")
+    folium_static(folc)
+    routes=googlerouting (
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
-st.write(routes)
-st.markdown("""-----""")
-st.title("all map")
-folium_static(fol)
-form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="640" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
-st.markdown(form, unsafe_allow_html=True)
+    st.write(routes)
+    st.markdown("""-----""")
+
+if genre =="all map":
+    st.title("all map")
+    folium_static(fol)
+if genre =="input":
+    form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="640" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
+    st.markdown(form, unsafe_allow_html=True)

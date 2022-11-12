@@ -81,7 +81,7 @@ if genre == "cluster":
     place=st.empty()
     left, space, right=place.columns([1,5,1])
     with space.expander("map", True):
-            folium_static(folc,width=390, height=400)
+            folium_static(folc,width=280, height=400)
     plac1=st.empty()
     left1, space1, righ1=plac1.columns([0.85,1,4])
     with space1.expander("routes"):

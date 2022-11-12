@@ -85,8 +85,8 @@ if genre == "cluster":
     left1, space1, righ1=place.columns([1,5,1])
     with space1.expander("routes"):
         for i, v in routes[1].items():
-            space1.write(f"[link to index {i}]({v})")
-        right.write(f"[link all routes]({routes[0]})")
+            st.write(f"[link to index {i}]({v})")
+            st.write(f"[link all routes]({routes[0]})")
     left2, space2, righ2=place.columns([1,5,1])
     with space2.expander("input form"):
         form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="660" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'

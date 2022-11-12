@@ -78,7 +78,7 @@ if genre == "cluster":
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
-    space=st.columns(1)
+    s, space, s2=st.columns(3)
     with space.expander("map", True):
             folium_static(folc)
     with st.expander("routes"):

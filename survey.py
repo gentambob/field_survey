@@ -83,10 +83,9 @@ if genre == "cluster":
     with space.expander("map", True):
             folium_static(folc)
     left1, space1, righ1=place.columns([1,5,1])
-    with space.expander("routes"):
-        left, center, right=place.columns([2,2,1])
+    with space1.expander("routes"):
         for i, v in routes[1].items():
-            center.write(f"[link to index {i}]({v})")
+            space1.write(f"[link to index {i}]({v})")
         right.write(f"[link all routes]({routes[0]})")
     left2, space2, righ2=place.columns([1,5,1])
     with space2.expander("input form"):

@@ -13,6 +13,7 @@ import shapely
 from sklearn.cluster import SpectralClustering
 from osmnx.projection import project_gdf
 import pandas as pd
+st.set_page_config(layout="wide")
 def googlerouting (df_plans):
     otw=df_plans.to_numpy()
     individuals={}

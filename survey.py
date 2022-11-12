@@ -84,7 +84,7 @@ if genre == "cluster":
             center.write(f"[link to index {i}]({v})")
     st.markdown("""-----""")
     with st.expander("show input form"):
-        form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="640" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
+        form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="660" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
         st.markdown(form, unsafe_allow_html=True)
 if genre =="all map":
     st.title("all map")

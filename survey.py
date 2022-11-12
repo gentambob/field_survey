@@ -82,14 +82,14 @@ if genre == "cluster":
     left, space, right=place.columns([1,5,1])
     with space.expander("map", True):
             folium_static(folc)
-    left, space, right=place.columns([1,5,1])
+    left1, space1, righ1=place.columns([1,5,1])
     with space.expander("routes"):
-        left, center, right=st.columns([2,2,1])
+        left, center, right=space1.columns([2,2,1])
         for i, v in routes[1].items():
             center.write(f"[link to index {i}]({v})")
         right.write(f"[link all routes]({routes[0]})")
-    st.markdown("""-----""")
-    with st.expander("input form"):
+    left2, space2, righ2=place.columns([1,5,1])
+    with space2.expander("input form"):
         form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="660" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
         st.markdown(form, unsafe_allow_html=True)
 if genre =="all map":

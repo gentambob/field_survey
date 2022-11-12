@@ -79,7 +79,7 @@ if genre == "cluster":
      ))
     st.write(f"[link all routes]({routes[0]})")
     with st.expander("routes"):
-        left, center, right=st.columns([0,2,1])
+        left, center, right=st.columns([1,2,1])
         for i, v in routes[1].items():
             center.write(f"[link to index {i}]({v})")
     st.markdown("""-----""")

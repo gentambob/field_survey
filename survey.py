@@ -78,7 +78,7 @@ if genre == "cluster":
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
-    st.markdown("[all link]"(routes))
+    st.markdown(f"[all link]({routes})")
 
     st.markdown("""-----""")
     satu, dua, tiga=st.columns(3)

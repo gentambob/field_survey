@@ -25,6 +25,7 @@ def googlerouting (df_plans):
 @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
 def data_all():
     data=gpd.read_file("target_fieldstream.json")
+    data["data_index"]=data.index
     x=data.geometry.x
     y=data.geometry.y
     data["x"]=x
@@ -54,7 +55,6 @@ data, fol, groups=data_all()
 def cluster_map(c, groups):
     cd=groups.get_group(c)
     cdplot=cd.copy()
-    cdplot["data_index"]=pd.Series(cdplot.index)
     cdplot.geometry=project_gdf(cdplot).buffer(100).to_crs(cd.crs).geometry
     cdplot=pd.concat([cd, cdplot])
     folc=cdplot.explore("kind", categorical=True, cmap="Set1", legend=True)

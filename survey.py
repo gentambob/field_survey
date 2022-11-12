@@ -79,9 +79,9 @@ if genre == "cluster":
      ))
     st.write(f"[link all routes]({routes[0]})")
     with st.expander("routes"):
-        left, right=st.columns(2)
+        left, center, right=st.columns(3,1,3)
         for i, v in routes[1].items():
-            right.write(f"[link to index {i}]({v})")
+            center.write(f"[link to index {i}]({v})")
     st.markdown("""-----""")
     with st.expander("show input form"):
         form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="740" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'

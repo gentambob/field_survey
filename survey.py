@@ -14,14 +14,14 @@ from sklearn.cluster import SpectralClustering
 from osmnx.projection import project_gdf
 import pandas as pd
 def googlerouting (df_plans):
-    otw=df_plans.head(len(df_plans)-1).to_numpy()
-    final=df_plans.tail(1).to_numpy()[0]
-    
+    otw=df_plans.to_numpy()
+    individuals={}
     base="https://www.google.com/maps/dir//"
-    for o in otw:
+    basei="https://www.google.com/maps/dir//"
+    for o, i in zip(otw, df_plans.index):
         base=base+f"{o[1]},{o[0]}/"
-    base=base+f"{final[1]},{final[0]}"
-    return base.strip()
+        individuals[i]=basei+f"{o[1]},{o[0]}/"
+    return (base.strip(), individuals)
 @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
 def data_all():
     data=gpd.read_file("target_fieldstream.json")
@@ -77,7 +77,7 @@ if genre == "cluster":
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
-    st.markdown(routes)
+    st.markdown(routes[0])
     st.markdown("""-----""")
     satu, dua, tiga=st.columns(3)
     if dua.button("show input form"):

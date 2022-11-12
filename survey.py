@@ -77,14 +77,13 @@ if genre == "cluster":
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
-    st.write(f"[link all routes]({routes[0]})")
-    cont=st.container()
-    with cont.expander("map", True):
+    with st.expander("map", True):
             folium_static(folc)
     with st.expander("routes"):
         left, center, right=st.columns([2,2,1])
         for i, v in routes[1].items():
             center.write(f"[link to index {i}]({v})")
+        right.write(f"[link all routes]({routes[0]})")
     st.markdown("""-----""")
     with st.expander("input form"):
         form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="660" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'

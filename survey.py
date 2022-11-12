@@ -77,7 +77,7 @@ if genre == "cluster":
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
-    st.markdown(routes[0])
+    st.markdown(f"[link all routes]{routes[0]}")
     st.markdown("""-----""")
     satu, dua, tiga=st.columns(3)
     if dua.button("show input form"):

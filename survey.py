@@ -73,6 +73,7 @@ if genre == "cluster":
     [["x", "y"]].sort_values(["x","y"]
      ))
     st.write(routes)
+    st.table(cd.index)
     st.markdown("""-----""")
 
 if genre =="all map":

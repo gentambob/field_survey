@@ -57,6 +57,7 @@ def cluster_map(c, groups):
     cdplot=cd.copy()
     cdplot.geometry=project_gdf(cdplot).buffer(100).to_crs(cd.crs).geometry
     cdplot=pd.concat([cd, cdplot])
+    cdplot=cdplot[["kind", "data_index", "geometry"]]
     folc=cdplot.explore("kind", categorical=True, cmap="Set1", legend=True,popup=True)
     return folc, cd
 

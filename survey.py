@@ -72,15 +72,17 @@ place=st.empty()
 if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
     folc, cd=cluster_map(c, groups)
-    st.title(f"Zore grid and unsure survey points for cluster {c}")
     
     routes=googlerouting (
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
+    with place:
+        st.title(f"Zore grid and unsure survey points for cluster {c}")
     left, space, right=place.columns([1,5,1])
     with space.expander("map", True):
             folium_static(folc)
+    left, space, right=place.columns([1,5,1])
     with space.expander("routes"):
         left, center, right=st.columns([2,2,1])
         for i, v in routes[1].items():

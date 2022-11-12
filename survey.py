@@ -68,7 +68,7 @@ left, space1, s,right=st.columns(4)
 genre = right.radio("Mode",('cluster', 'all map'))
 if  left.button("clear cache"):
     st.experimental_singleton.clear()
-place=st.empty()
+
 if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
     folc, cd=cluster_map(c, groups)
@@ -77,17 +77,19 @@ if genre == "cluster":
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
-    with place:
-        st.title(f"Zore grid and unsure survey points for cluster {c}")
+    st.title(f"Zore grid and unsure survey points for cluster {c}")
+    place=st.empty()
     left, space, right=place.columns([1,5,1])
     with space.expander("map", True):
             folium_static(folc)
-    left1, space1, righ1=place.columns([1,5,1])
+    plac1=st.empty()
+    left1, space1, righ1=plac1.columns([1,5,1])
     with space1.expander("routes"):
         for i, v in routes[1].items():
             st.write(f"[link to index {i}]({v})")
             st.write(f"[link all routes]({routes[0]})")
-    left2, space2, righ2=place.columns([1,5,1])
+    place2=st.empty()
+    left2, space2, righ2=place2.columns([1,5,1])
     with space2.expander("input form"):
         form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="660" height="1500" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
         st.markdown(form, unsafe_allow_html=True)

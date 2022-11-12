@@ -20,7 +20,7 @@ def googlerouting (df_plans):
     base="https://www.google.com/maps/dir//"
     for o in otw:
         base=base+f"{o[1]},{o[0]}/"
-    base=base+f"@{final[1]},{final[0]}"
+    base=base+f"{final[1]},{final[0]}"
     return base.strip()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
 def data_all():

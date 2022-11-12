@@ -81,7 +81,7 @@ if genre == "cluster":
     place=st.empty()
     left, space, right=place.columns([1,5,1])
     with space.expander("map", True):
-            folium_static(folc)
+            folium_static(folc,width=390, height=400)
     plac1=st.empty()
     left1, space1, righ1=plac1.columns([0.85,1,4])
     with space1.expander("routes"):
@@ -95,5 +95,5 @@ if genre == "cluster":
         st.markdown(form, unsafe_allow_html=True)
 if genre =="all map":
     st.title("all map")
-    folium_static(fol)
+    folium_static(fol,width=400, height=400)
 

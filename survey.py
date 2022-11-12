@@ -53,6 +53,7 @@ data, fol, groups=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def cluster_map(c, groups):
     cd=groups.get_group(c)
+    cd["data_index"]=pd.Series(cd.index)
     cdplot=cd.copy()
     cdplot.geometry=project_gdf(cdplot).buffer(100).to_crs(cd.crs).geometry
     cdplot=pd.concat([cd, cdplot])
@@ -77,7 +78,6 @@ if genre == "cluster":
     [["x", "y"]].sort_values(["x","y"]
      ))
     st.write(routes)
-    st.table(pd.Series(cd.index).rename("data index"))
     st.markdown("""-----""")
     satu, dua, tiga=st.columns(3)
     if dua.button("show input form"):

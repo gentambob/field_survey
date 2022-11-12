@@ -15,13 +15,12 @@ from osmnx.projection import project_gdf
 import pandas as pd
 def googlerouting (df_plans):
     otw=df_plans.head(len(df_plans)-1).to_numpy()
-    otw_i=df_plans.head(len(df_plans)-1).index
     final=df_plans.tail(1).to_numpy()[0]
-    individuals={}
+    
     base="https://www.google.com/maps/dir//"
-    for o in zip(otw, otw_i):
+    for o in otw:
         base=base+f"{o[1]},{o[0]}/"
-    base=base+f"{final[1]},{final[0]}"
+    base=base+f"@{final[1]},{final[0]}"
     return base.strip()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
 def data_all():
@@ -78,8 +77,7 @@ if genre == "cluster":
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]
      ))
-    st.markdown(f"{routes}")
-
+    st.markdown(routes)
     st.markdown("""-----""")
     satu, dua, tiga=st.columns(3)
     if dua.button("show input form"):

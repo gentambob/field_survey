@@ -68,7 +68,7 @@ left, space1, s,right=st.columns(4)
 genre = right.radio("Mode",('cluster', 'all map'))
 if  left.button("clear cache"):
     st.experimental_singleton.clear()
-
+place=st.empty()
 if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
     folc, cd=cluster_map(c, groups)

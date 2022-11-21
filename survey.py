@@ -97,7 +97,9 @@ if genre =="all map":
     st.title("all map")
     folium_static(fol,width=400, height=400)
 with left.expander("Readme"):
-    notes=""" - google formのindexにはgps/garminの番号をmasukin suru.\n
+    notes=""" 
+    \n
+    - google formのindexにはgps/garminの番号をmasukin suru.\n
     - kalo pts nya == zerogrid, cari sebanyak mungkin dlm jarak kira2 100m dr titik \n
     - take a pic if possible \n
     """

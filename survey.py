@@ -57,7 +57,7 @@ def data_all():
     return data, fol, groups,  grid_profile
 data, fol, groups,grid_profile=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)
-def cluster_map(c, groups, m):
+def cluster_map(c, groups):
     cd=groups.get_group(c)
     cdplot=cd.copy()
     cdplot.geometry=project_gdf(cdplot).buffer(100).to_crs(cd.crs).geometry

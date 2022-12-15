@@ -74,7 +74,7 @@ if  left.button("clear cache"):
     st.experimental_singleton.clear()
 
 if genre == "cluster":
-    c=st.sidebar.selectbox("cluster (targets)",  sortedlis(data["cluster"].unique()))
+    c=st.sidebar.selectbox("cluster (targets)",  sorted(list(data["cluster"].unique()))
     folc, cd=cluster_map(c, groups)
     folc=gpd.clip(grid_profile,cd).explore(m=folc)
     routes=googlerouting (

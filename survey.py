@@ -79,6 +79,7 @@ if genre == "cluster":
         style_kwds={"fillOpacity":0.44}
      legend_kwds={"colorbar":False, "interval":True})
     folc=cdplot.explore("kind", m=folc, categorical=True, cmap="Set1", legend=True)
+    folium.LayerControl().add_to(folc)
     routes=googlerouting (
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]

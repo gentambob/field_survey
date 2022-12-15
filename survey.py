@@ -57,14 +57,13 @@ def data_all():
     return data, fol, groups,  grid_profile
 data, fol, groups,grid_profile=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)
-def cluster_map(c, groups):
+def cluster_map(c, groups, m):
     cd=groups.get_group(c)
     cdplot=cd.copy()
     cdplot.geometry=project_gdf(cdplot).buffer(100).to_crs(cd.crs).geometry
     cdplot=pd.concat([cd, cdplot])
     cdplot=cdplot[["kind", "data_index", "geometry"]]
-    folc=cdplot.explore("kind", categorical=True, cmap="Set1", legend=True)
-    return folc, cd
+    return cdplot, cd
 
 
     
@@ -75,9 +74,9 @@ if  left.button("clear cache"):
 
 if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  sorted(list(data["cluster"].unique())))
-    folc, cd=cluster_map(c, groups)
-    folc=gpd.clip(grid_profile,shapely.geometry.box(* cd.total_bounds))[["geometry", "points"]].explore("points", m=folc, scheme='quantiles',
-     k=3, legend_kwds={"interval":True})
+    cdplot, cd=cluster_map(c, groups)
+    folc=gpd.clip(grid_profile,shapely.geometry.box(* cd.total_bounds))[["geometry", "points"]].explore("points", legend_kwds={"colorbar":False, "interval":True})
+    folc=cdplot.explore("kind", m=folc, categorical=True, cmap="Set1", legend=True)
     routes=googlerouting (
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]

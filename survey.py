@@ -75,12 +75,9 @@ if  left.button("clear cache"):
 if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  sorted(list(data["cluster"].unique())))
     cdplot, cd=cluster_map(c, groups)
-    folc=gpd.clip(grid_profile,shapely.geometry.box(* cd.total_bounds))[["geometry", "points"]].explore(column="points", cmap="Reds",
-       # style_kwds={"fillOpacity":0.44},
-     #legend_kwds={"colorbar":False, "interval":True}
-     )
+    folc=gpd.clip(grid_profile,shapely.geometry.box(* cd.total_bounds))[["geometry", "points"]].explore(column="points", cmap="Reds")
     folc=cdplot.explore(column="kind", m=folc, categorical=True, cmap="Set5")
-    folium.LayerControl().add_to(folc)
+    #folium.LayerControl().add_to(folc)
     routes=googlerouting (
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]

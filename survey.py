@@ -25,6 +25,8 @@ def googlerouting (df_plans):
     return (base.strip(), individuals)
 @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
 def data_all():
+    grid_profile=gpd.GeoDataFrame(pd.read_csv("./1km_osm_ghs_profile.csv"), geometry=pd.read_csv("./1km_osm_ghs_profile.csv").geometry.apply(shapely.wkt.loads),
+        crs="epsg:4326")
     data=gpd.read_file("target_fieldstream.json")
     data["data_index"]=data.index
     x=data.geometry.x
@@ -37,8 +39,10 @@ def data_all():
             affinity="nearest_neighbors",
             random_state=0).fit(X)
     data["cluster"]=clustering.labels_
+
     groups=data.groupby("cluster")
     datp=data.copy()
+    datp.geometry=project_gdf(datp).buffer(100).to_crs(data.crs).geometry
     boxs=gpd.GeoSeries(
         groups.apply(lambda x:shapely.geometry.box(* x.total_bounds)),
         crs=data.crs
@@ -50,8 +54,8 @@ def data_all():
 
 
     fol=datp.explore("cluster", categorical=True, cmap="Set1", legend=True)
-    return data, fol, groups
-data, fol, groups=data_all()
+    return data, fol, groups,  grid_profile
+data, fol, groups,grid_profile=data_all()
 @st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def cluster_map(c, groups):
     cd=groups.get_group(c)
@@ -72,7 +76,7 @@ if  left.button("clear cache"):
 if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  data["cluster"].unique())
     folc, cd=cluster_map(c, groups)
-    
+    folc=grid_profile.clip(cd).explore(m=folc)
     routes=googlerouting (
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]

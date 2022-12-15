@@ -76,7 +76,8 @@ if  left.button("clear cache"):
 if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  sorted(list(data["cluster"].unique())))
     folc, cd=cluster_map(c, groups)
-    folc=gpd.clip(grid_profile,cd).explore(m=folc)
+    st.write(cd)
+    folc=gpd.clip(grid_profile,shapely.geometry.box(* cd.total_bounds)).explore(m=folc)
     routes=googlerouting (
     cd.to_crs("epsg:900913")
     [["x", "y"]].sort_values(["x","y"]

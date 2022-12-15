@@ -76,7 +76,7 @@ if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  sorted(list(data["cluster"].unique())))
     cdplot, cd=cluster_map(c, groups)
     folc=gpd.clip(grid_profile,shapely.geometry.box(* cd.total_bounds))[["geometry", "points"]].explore(column="points", cmap="Reds")
-    folc=cdplot.explore(column="kind", m=folc, categorical=True, cmap="Set2")
+    folc=cdplot.explore(column="kind", m=folc, categorical=True, cmap="Set1")
     #folium.LayerControl().add_to(folc)
     routes=googlerouting (
     cd.to_crs("epsg:900913")

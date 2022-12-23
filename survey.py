@@ -50,7 +50,9 @@ if genre == "cluster":
     def generate_localMap(c):
         pts_inside=gpd.clip(dataRSB, dataRW.query(f"cluster=={c}"))[["geometry"]]
         line_inside=gpd.clip(dataS, dataRW.query(f"cluster=={c}"))[["geometry"]]
-        m=dataRW.query(f"cluster=={c}")[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw", style_kwds={"fill":False})
+        m=dataRW.query(f"cluster=={c}")[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw", 
+            #style_kwds={"fill":False}
+            )
         if len(pts_inside)>0:
             pts_inside.geometry=project_gdf(pts_inside).buffer(10).to_crs(pts_inside.crs).geometry
             m=pts_inside.explore(m=m, color="red", name="pts")
@@ -86,6 +88,7 @@ if genre == "cluster":
             st.markdown(form, unsafe_allow_html=True)
         
     generate_localMap(c)
+    st.stop()
 if genre =="all map":
     st.title("all map")
     folium_static(allmap,width=400, height=400)

@@ -79,7 +79,7 @@ if genre == "cluster":
                 y=polygon.centroid.y
                 base="https://www.google.com/maps/dir//"
                 base=base+f"{y},{x}/"
-                st.write(f"[link to index {g}]({base})")
+                st.write(f"[link to {g}]({base})")
 
         place2=st.empty()
         left2, space2, righ2=place2.columns([1,5,1])

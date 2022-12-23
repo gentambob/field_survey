@@ -26,88 +26,73 @@ def googlerouting (df_plans):
     return (base.strip(), individuals)
 @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
 def data_all():
-    grid_profile=gpd.GeoDataFrame(pd.read_csv("./1km_osm_ghs_profile.csv"), geometry=pd.read_csv("./1km_osm_ghs_profile.csv").geometry.apply(shapely.wkt.loads),
-        crs="epsg:4326")
-    data=gpd.read_file("target_fieldstream.json")
-    data["data_index"]=data.index
-    x=data.geometry.x
-    y=data.geometry.y
-    data["x"]=x
-    data["y"]=y
-    X=[[xs, ys] for xs, ys in zip(x, y)]
-    clustering = SpectralClustering(n_clusters=30,
+    dataRSB=gpd.read_file("additional_data_Plus_RSBVersion4.json")
+    dataS=gpd.read_file("undersampleRW_zerostreet.json")
+    dataRW=gpd.read_file("rwtarget.json")
+    X=[[xs, ys] for xs, ys in zip(dataRW["x"],dataRW["y"])]
+    clustering = SpectralClustering(n_clusters=12,
             assign_labels='discretize',
             affinity="nearest_neighbors",
             random_state=0).fit(X)
-    data["cluster"]=clustering.labels_
-
-    groups=data.groupby("cluster")
-    datp=data.copy()
-    datp.geometry=project_gdf(datp).buffer(200).to_crs(data.crs).geometry
-    boxs=gpd.GeoSeries(
-        groups.apply(lambda x:shapely.geometry.box(* x.total_bounds)),
-        crs=data.crs
-                       ).rename("geometry")
-    for i, d in enumerate(boxs):
-        index=len(datp)+1
-        datp.at[index, "geometry"]=d.exterior
-        datp.at[index, "cluster"]="box"#+str(i)
-
-
-    fol=datp.explore("cluster", categorical=True, cmap="Set1", legend=True)
-    return data, fol, groups,  grid_profile
-data, fol, groups,grid_profile=data_all()
-@st.cache(suppress_st_warning=True,allow_output_mutation=True)
-def cluster_map(c, groups):
-    cd=groups.get_group(c)
-    cdplot=cd.copy()
-    cdplot.geometry=project_gdf(cdplot).buffer(100).to_crs(cd.crs).geometry
-    cdplot=pd.concat([cd, cdplot])
-    cdplot=cdplot[["kind", "data_index", "geometry"]]
-    return cdplot, cd
-
-
-    
+    dataRW["cluster"]=clustering.labels_
+    allmap=dataRW[["cluster", "unique_no_RW", "geometry"]].explore("cluster", categorical=True, cmap="tab10")
+    return(dataRSB, dataS, dataRW, allmap)
+dataRSB, dataS, dataRW, allmap=data_all()
 left, space1, s,right=st.columns(4)
 genre = right.radio("Mode",('cluster', 'all map'))
+
 if  left.button("clear cache"):
     st.experimental_singleton.clear()
 
 if genre == "cluster":
-    c=st.sidebar.selectbox("cluster (targets)",  sorted(list(data["cluster"].unique())))
-    cdplot, cd=cluster_map(c, groups)
-    folc=gpd.clip(grid_profile,shapely.geometry.box(* cd.total_bounds))[["geometry", "points"]].explore(column="points", 
-        cmap="Blues",name="grid")
-    folc=cdplot.explore(column="kind", m=folc, categorical=True, cmap="Set1", name="target pts")
-    folium.LayerControl().add_to(folc)
-    routes=googlerouting (
-    cd.to_crs("epsg:900913")
-    [["x", "y"]].sort_values(["x","y"]
-     ))
-    st.title(f"Zore grid and unsure survey points for cluster {c}")
-    place=st.empty()
-    left, space, right=place.columns([1,5,1])
-    with space.expander("map", True):
-            folium_static(folc,width=280, height=400)
-    plac1=st.empty()
-    left1, space1, righ1=plac1.columns([0.85,1,4])
-    with space1.expander("routes"):
-        st.write(f"[link all routes]({routes[0]})🗃")
-        for i, v in routes[1].items():
-            st.write(f"[link to index {i}]({v})")
-    place2=st.empty()
-    left2, space2, righ2=place2.columns([1,5,1])
-    with space2.expander("input form"):
-        form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="100%" height="1600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
-        st.markdown(form, unsafe_allow_html=True)
+    c=st.sidebar.selectbox("cluster (targets)",  sorted(list(dataRW["cluster"].unique())))
+    @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
+    def generate_localMap(c):
+        pts_inside=gpd.clip(dataRSB, dataRW.query(f"cluster=={c}"))[["geometry"]]
+        line_inside=gpd.clip(dataS, dataRW.query(f"cluster=={c}"))[["geometry"]]
+        m=dataRW.query(f"cluster=={c}")[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw", style_kwds={"fill":False})
+        if len(pts_inside)>0:
+            pts_inside.geometry=project_gdf(pts_inside).buffer(10).to_crs(pts_inside.crs).geometry
+            m=pts_inside.explore(m=m, color="red", name="pts")
+            omit_line=gpd.sjoin(pts_inside, line_inside)["index_right"]
+            if len(omit_line)>0:
+                line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
+        else:
+            st.write(f"no recorded points inside RWs in cluster {c}")
+
+        if len(line_inside)>0:
+            line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
+            m=line_inside.explore(m=m, color="grey", name="street")
+        folium.LayerControl().add_to(m)
+        place=st.empty()
+        left, space, right=place.columns([1,5,1])
+        with space.expander("map", True):
+                folium_static(m,width=280, height=400)
+        place3=st.empty()
+        left3, space3, righ3=place3.columns([1,5,1])
+        with space3.expander("route"):
+            for g, gd in gpd.clip(dataS, dataRW.query(f"cluster=={c}")).groupby("index_right"):
+                polygon=shapely.geometry.box(*gd.total_bounds)
+                x=polygon.centroid.x
+                y=polygon.centroid.y
+                base="https://www.google.com/maps/dir//"
+                base=base+f"{y},{x}/"
+                st.write(f"[link to index {g}]({base})")
+
+        place2=st.empty()
+        left2, space2, righ2=place2.columns([1,5,1])
+        with space2.expander("input form"):
+            form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="100%" height="1600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
+            st.markdown(form, unsafe_allow_html=True)
+        
+    generate_localMap(c)
 if genre =="all map":
     st.title("all map")
-    folium_static(fol,width=400, height=400)
-with left.expander("Readme"):
-    notes=""" 
-    \n
-    - google formのindexにはgps/garminの番号をmasukin suru.\n
-    - kalo pts nya == zerogrid, cari sebanyak mungkin dlm jarak kira2 100m dr titik \n
-    - take a pic if possible \n
-    """
-    st.write(notes)
+    folium_static(allmap,width=400, height=400)
+
+
+
+
+
+    
+  

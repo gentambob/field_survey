@@ -46,7 +46,7 @@ if  left.button("clear cache"):
 
 if genre == "cluster":
     c=st.sidebar.selectbox("cluster (targets)",  sorted(list(dataRW["cluster"].unique())))
-    @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
+    #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
         pts_inside=gpd.clip(dataRSB, dataRW.query(f"cluster=={c}"))[["geometry"]]
         line_inside=gpd.clip(dataS, dataRW.query(f"cluster=={c}"))[["geometry"]]

@@ -64,7 +64,7 @@ if genre == "rw":
         if len(line_inside)>0:
             line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
             m=line_inside.explore("storokes", m=m, name="street")
-            gd=line_inside.sort_values("len").head(10).geometry
+            gd=line_inside.sort_values("len",ascending=False).head(10).geometry
             with space3.expander("route"):
                 for g, polygon in enumerate(gd):
                     x=polygon.centroid.x

@@ -36,7 +36,7 @@ def data_all():
     return(dataRSB, dataS, dataRW, allmap)
 
 dataRSB, dataS, dataRW, allmap=data_all()
-@st.cache(suppress_st_warning=True,allow_output_mutation=False) 
+@st.cache(suppress_st_warning=True,allow_output_mutation=True, persist=True) 
 def generate_localMap(c):
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     st.write(rw_geom[list(dataRW.columns)[1:5]])

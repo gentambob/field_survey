@@ -36,7 +36,7 @@ def data_all():
     return(dataRSB, dataS, dataRW, allmap)
 dataRSB, dataS, dataRW, allmap=data_all()
 left, space1, s,right=st.columns(4)
-genre = right.radio("Mode",('cluster', 'all map'))
+genre = right.radio("Mode",('rw', 'all map'))
 
 if  left.button("clear cache"):
     st.experimental_singleton.clear()

@@ -46,7 +46,7 @@ if genre == "rw":
     #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
         rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
-        st.write(rw_geom)
+        st.write(rw_geom[list(dataRW.columns)[:5]])
         pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
         line_inside=gpd.clip(dataS, rw_geom)[["geometry"]]
         m=rw_geom[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw")
@@ -71,12 +71,12 @@ if genre == "rw":
         left3, space3, righ3=place3.columns([1,5,1])
         with space3.expander("route"):
             gd=line_inside.geometry
-            for polygon in gd:
+            for g, polygon in enumerate(gd):
                 x=polygon.centroid.x
                 y=polygon.centroid.y
                 base="https://www.google.com/maps/dir//"
                 base=base+f"{y},{x}/"
-                st.write(f"[link to {g}]({base})")
+                st.write(f"[link to ungated strt: {g}]({base})")
 
         place2=st.empty()
         left2, space2, righ2=place2.columns([1,5,1])

@@ -63,7 +63,7 @@ if genre == "rw":
         left3, space3, righ3=place3.columns([1,5,1])
         if len(line_inside)>0:
             line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
-            m=line_inside.explore("storokes", m=m, name="street")
+            m=line_inside.explore( m=m, color="grey", name="street")
             gd=line_inside.sort_values("len",ascending=False).head(10).geometry
             with space3.expander("route"):
                 for g, polygon in enumerate(gd):
@@ -72,7 +72,7 @@ if genre == "rw":
                     base="https://www.google.com/maps/dir//"
                     base=base+f"{y},{x}/"
                     st.write(f"[link to ungated strt: {g}]({base})")
-            m=gd.explore(m=m, name="street selected")
+            m=gd.explore(m=m, color="r", name="street selected")
         else:
             with space3.expander("route"):
                 for polygon in rw_geom.geometry:

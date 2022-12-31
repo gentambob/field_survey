@@ -75,11 +75,13 @@ def generate_localMap(c):
                 elif len(selection)==10:
                     break
                 else:
-                    geoser=gpd.GeoSeries(selection)
-                    mind=geoser.distance(polygon).min()
-                    if mind>10:
+                    pol=project_gdf(gpd.GeoSeries(polygon).set_crs('EPSG:4326')).reset_index()
+                    pol=pol.geometry[0]
+                    geoser=project_gdf(gpd.GeoSeries(selection).set_crs('EPSG:4326'))
+                    mind=geoser.distance(pol).min()
+                    if mind<10:
                         st.write(f"[link to ungated strt: {g}]({base})")
-                        st.write(mind)
+
 
                 selection.append(polygon)
         m=gd.explore(m=m, color="red", name="street selected")

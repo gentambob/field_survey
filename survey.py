@@ -59,25 +59,37 @@ if genre == "rw":
         else:
             st.write(f"no recorded points inside RWs in unique_no_RW {c}")
 
+        place3=st.empty()
+        left3, space3, righ3=place3.columns([1,5,1])
         if len(line_inside)>0:
             line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
             m=line_inside.explore("storokes", m=m, name="street")
+            gd=line_inside.sort_values("len").head(10).geometry
+            with space3.expander("route"):
+                for g, polygon in enumerate(gd):
+                    x=polygon.centroid.x
+                    y=polygon.centroid.y
+                    base="https://www.google.com/maps/dir//"
+                    base=base+f"{y},{x}/"
+                    st.write(f"[link to ungated strt: {g}]({base})")
+            m=gd.explore(m=m, name="street selected")
+        else:
+            with space3.expander("route"):
+                for polygon in rw_geom.geometry:
+                    x=polygon.centroid.x
+                    y=polygon.centroid.y
+                    base="https://www.google.com/maps/dir//"
+                    base=base+f"{y},{x}/"
+                    st.write(f"[link to ungated strt: {c}]({base})")
+      
+        
+        
+        
         folium.LayerControl().add_to(m)
         place=st.empty()
         left, space, right=place.columns([1,5,1])
         with space.expander("map", True):
                 folium_static(m,width=280, height=400)
-        place3=st.empty()
-        left3, space3, righ3=place3.columns([1,5,1])
-        with space3.expander("route"):
-            gd=line_inside.sort_values("len").head(10).geometry
-            for g, polygon in enumerate(gd):
-                x=polygon.centroid.x
-                y=polygon.centroid.y
-                base="https://www.google.com/maps/dir//"
-                base=base+f"{y},{x}/"
-                st.write(f"[link to ungated strt: {g}]({base})")
-
         place2=st.empty()
         left2, space2, righ2=place2.columns([1,5,1])
         with space2.expander("input form"):

@@ -72,7 +72,7 @@ if genre == "rw":
                     base="https://www.google.com/maps/dir//"
                     base=base+f"{y},{x}/"
                     st.write(f"[link to ungated strt: {g}]({base})")
-            m=gd.explore(m=m, color="r", name="street selected")
+            m=gd.explore(m=m, color="red", name="street selected")
         else:
             with space3.expander("route"):
                 for polygon in rw_geom.geometry:

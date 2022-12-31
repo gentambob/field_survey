@@ -30,10 +30,7 @@ def data_all():
     dataS=gpd.read_file("undersampleRW_zerostreet.json")
     dataRW=gpd.read_file("rwtarget.json")
     X=[[xs, ys] for xs, ys in zip(dataRW["x"],dataRW["y"])]
-    clustering = SpectralClustering(n_clusters=12,
-            assign_labels='discretize',
-            affinity="nearest_neighbors",
-            random_state=0).fit(X)
+    clustering = SpectralClustering(n_clusters=12, assign_labels='discretize',affinity="nearest_neighbors",random_state=0).fit(X)
     dataRW["cluster"]=clustering.labels_
     allmap=dataRW[["cluster", "unique_no_RW", "geometry"]].explore("cluster", categorical=True, cmap="tab10")
     return(dataRSB, dataS, dataRW, allmap)
@@ -44,13 +41,13 @@ genre = right.radio("Mode",('cluster', 'all map'))
 if  left.button("clear cache"):
     st.experimental_singleton.clear()
 
-if genre == "cluster":
-    c=st.sidebar.selectbox("cluster (targets)",  sorted(list(dataRW["cluster"].unique())))
+if genre == "rw":
+    c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
     #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
-        pts_inside=gpd.clip(dataRSB, dataRW.query(f"cluster=={c}"))[["geometry"]]
-        line_inside=gpd.clip(dataS, dataRW.query(f"cluster=={c}"))[["geometry"]]
-        m=dataRW.query(f"cluster=={c}")[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw", 
+        pts_inside=gpd.clip(dataRSB, dataRW.query(f"unique_no_RW=={c}"))[["geometry"]]
+        line_inside=gpd.clip(dataS, dataRW.query(f"unique_no_RW=={c}"))[["geometry"]]
+        m=dataRW.query(f"unique_no_RW=={c}")[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw", 
             #style_kwds={"fill":False}
             )
         if len(pts_inside)>0:
@@ -60,7 +57,7 @@ if genre == "cluster":
             if len(omit_line)>0:
                 line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
         else:
-            st.write(f"no recorded points inside RWs in cluster {c}")
+            st.write(f"no recorded points inside RWs in unique_no_RW {c}")
 
         if len(line_inside)>0:
             line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
@@ -73,13 +70,14 @@ if genre == "cluster":
         place3=st.empty()
         left3, space3, righ3=place3.columns([1,5,1])
         with space3.expander("route"):
-            for g, gd in gpd.clip(dataS, dataRW.query(f"cluster=={c}")).groupby("index_right"):
-                polygon=shapely.geometry.box(*gd.total_bounds)
-                x=polygon.centroid.x
-                y=polygon.centroid.y
-                base="https://www.google.com/maps/dir//"
-                base=base+f"{y},{x}/"
-                st.write(f"[link to {g}]({base})")
+            for g, gd in gpd.clip(dataS, dataRW.query(f"unique_no_RW=={c}")).groupby("index_right"):
+                #polygon=shapely.geometry.box(*gd.total_bounds)
+                for polygon in gd:
+                    x=polygon.centroid.x
+                    y=polygon.centroid.y
+                    base="https://www.google.com/maps/dir//"
+                    base=base+f"{y},{x}/"
+                    st.write(f"[link to {g}]({base})")
 
         place2=st.empty()
         left2, space2, righ2=place2.columns([1,5,1])

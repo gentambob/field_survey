@@ -43,7 +43,7 @@ if  left.button("clear cache"):
 
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
-    #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
+    @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
         rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
         st.write(rw_geom[list(dataRW.columns)[1:5]])
@@ -63,7 +63,7 @@ if genre == "rw":
         place3=st.empty()
         left3, space3, righ3=place3.columns([1,5,1])
 
-        
+
         if len(line_inside)>0:
             line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
             m=line_inside.explore( m=m, color="grey", name="street")

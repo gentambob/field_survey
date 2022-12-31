@@ -43,6 +43,7 @@ if  left.button("clear cache"):
 
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
+    print(c)
     #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
         pts_inside=gpd.clip(dataRSB, dataRW.query(f"unique_no_RW=={c}"))[["geometry"]]
@@ -70,14 +71,13 @@ if genre == "rw":
         place3=st.empty()
         left3, space3, righ3=place3.columns([1,5,1])
         with space3.expander("route"):
-            for g, gd in gpd.clip(dataS, dataRW.query(f"unique_no_RW=={c}")).groupby("index_right"):
-                #polygon=shapely.geometry.box(*gd.total_bounds)
-                for polygon in gd:
-                    x=polygon.centroid.x
-                    y=polygon.centroid.y
-                    base="https://www.google.com/maps/dir//"
-                    base=base+f"{y},{x}/"
-                    st.write(f"[link to {g}]({base})")
+            gd=line_inside.geometry
+            for polygon in gd:
+                x=polygon.centroid.x
+                y=polygon.centroid.y
+                base="https://www.google.com/maps/dir//"
+                base=base+f"{y},{x}/"
+                st.write(f"[link to {g}]({base})")
 
         place2=st.empty()
         left2, space2, righ2=place2.columns([1,5,1])

@@ -77,7 +77,8 @@ def generate_localMap(c):
                 else:
                     geoser=gpd.GeoSeries(selection)
                     mind=geoser.distance(polygon).min()
-                    if mind>30:
+                    print(mind)
+                    if mind>10:
                         st.write(f"[link to ungated strt: {g}]({base})")
 
                 selection.append(polygon)

@@ -65,7 +65,6 @@ def generate_localMap(c):
         selection=[]
         with space3.expander("route"):
             for g, polygon in enumerate(gd):
-
                 x=polygon.centroid.x
                 y=polygon.centroid.y
                 base="https://www.google.com/maps/dir//"
@@ -73,7 +72,7 @@ def generate_localMap(c):
                 if len(selection)==0:
                     st.write(f"[link to ungated strt: {g}]({base})")
                     selection.append(polygon)
-                elif len(selection)==10:
+                elif len(selection)>10:
                     break
                 else:
                     pol=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries([polygon]), crs=line_inside.crs))

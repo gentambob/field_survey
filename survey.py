@@ -43,7 +43,7 @@ if  left.button("clear cache"):
 
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
-    print(c)
+    st.write(dataRW.columns)
     #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
         pts_inside=gpd.clip(dataRSB, dataRW.query(f"unique_no_RW=={c}"))[["geometry"]]

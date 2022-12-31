@@ -45,7 +45,7 @@ if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
     #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
-        rw_geom=dataRW.query(f"unique_no_RW=={c}")
+        rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
         st.write(rw_geom)
         pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
         line_inside=gpd.clip(dataS, rw_geom)[["geometry"]]

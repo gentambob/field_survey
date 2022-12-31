@@ -101,15 +101,15 @@ genre = right.radio("Mode",('rw', 'all map'))
 
 if  left.button("clear cache"):
     st.experimental_singleton.clear()
-
+    st.experimental_rerun()
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
-   
     generate_localMap(c)
     st.stop()
 if genre =="all map":
     st.title("all map")
     folium_static(allmap,width=400, height=400)
+    st.stop()
 
 
 

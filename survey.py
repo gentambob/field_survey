@@ -70,7 +70,7 @@ if genre == "rw":
         place3=st.empty()
         left3, space3, righ3=place3.columns([1,5,1])
         with space3.expander("route"):
-            gd=line_inside.geometry
+            gd=line_inside.sort_values("len").head(10).geometry
             for g, polygon in enumerate(gd):
                 x=polygon.centroid.x
                 y=polygon.centroid.y

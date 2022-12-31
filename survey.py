@@ -61,7 +61,8 @@ def generate_localMap(c):
     if len(line_inside)>0:
         line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
         m=line_inside.explore( m=m, color="grey", name="street")
-        gd=line_inside.sort_values("len",ascending=False).geometry
+        line_inside["newlen"]=line_inside.length
+        gd=line_inside.sort_values("newlen",ascending=False).geometry
         selection=[]
         num=0
         with space3.expander("route"):

@@ -25,7 +25,7 @@ def googlerouting (df_plans):
         individuals[i]=basei+f"{o[1]},{o[0]}/"
     return (base.strip(), individuals)
 #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
-@st.experimental_memo(suppress_st_warning=True)
+@st.experimental_singleton(suppress_st_warning=True)
 def data_all():
     dataRSB=gpd.read_file("additional_data_Plus_RSBVersion4.json")
     dataS=gpd.read_file("undersampleRW_zerostreet.json")

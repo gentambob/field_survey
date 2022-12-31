@@ -43,7 +43,9 @@ if  left.button("clear cache"):
 
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
-    @st.cache(suppress_st_warning=True,allow_output_mutation=True) 
+    @st.cache(suppress_st_warning=True,
+        #allow_output_mutation=True
+        ) 
     def generate_localMap(c):
         rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
         st.write(rw_geom[list(dataRW.columns)[1:5]])

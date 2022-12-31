@@ -82,7 +82,7 @@ def generate_localMap(c):
                     pol=pol.geometry.values[0]
                     geoser=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries(selection), crs=line_inside.crs))
                     mind=geoser.distance(pol).min()
-                    if mind>45:
+                    if mind>15:
                         st.write(f"[link to ungated strt: {num}]({base})")
                         num=num+1
                         selection.append(polygon)

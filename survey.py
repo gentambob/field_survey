@@ -61,7 +61,7 @@ if genre == "rw":
 
         if len(line_inside)>0:
             line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
-            m=line_inside.explore(m=m, color="grey", name="street")
+            m=line_inside.explore("storokes", m=m, name="street")
         folium.LayerControl().add_to(m)
         place=st.empty()
         left, space, right=place.columns([1,5,1])

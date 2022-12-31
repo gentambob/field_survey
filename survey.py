@@ -75,9 +75,9 @@ def generate_localMap(c):
                 elif len(selection)==10:
                     break
                 else:
-                    pol=project_gdf(gpd.GeoSeries([polygon]).set_crs('EPSG:4326')).reset_index()
+                    pol=project_gdf(gpd.GeoDataFrame(gpd.GeoSeries([polygon]), crs=gd.crs)).reset_index()
                     pol=pol.geometry.values[0]
-                    geoser=project_gdf(gpd.GeoSeries(selection).set_crs('EPSG:4326'))
+                    geoser=project_gdf(gpd.GeoDataFrame(gpd.GeoSeries(selection), crs=gd.crs))
                     mind=geoser.distance(pol).min()
                     if mind<10:
                         st.write(f"[link to ungated strt: {g}]({base})")

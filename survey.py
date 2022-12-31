@@ -61,6 +61,9 @@ def generate_localMap(c):
     if len(line_inside)>0:
         line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
         m=line_inside.explore( m=m, color="grey", name="street")
+
+
+        ## a pretty cool algrthm for size-len wise street filtering for field survey !
         line_inside["newlen"]=line_inside.length
         gd=line_inside.sort_values("newlen",ascending=False).geometry
         selection=[]
@@ -82,7 +85,7 @@ def generate_localMap(c):
                     pol=pol.geometry.values[0]
                     geoser=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries(selection), crs=line_inside.crs))
                     mind=geoser.distance(pol).min()
-                    if mind>15:
+                    if mind>15: #at least 15 meters away from any selected street 
                         st.write(f"[link to ungated strt: {num}]({base})")
                         num=num+1
                         selection.append(polygon)

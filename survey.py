@@ -24,7 +24,8 @@ def googlerouting (df_plans):
         base=base+f"{o[1]},{o[0]}/"
         individuals[i]=basei+f"{o[1]},{o[0]}/"
     return (base.strip(), individuals)
-@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
+#@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
+@st.experimental_memo(suppress_st_warning=True)
 def data_all():
     dataRSB=gpd.read_file("additional_data_Plus_RSBVersion4.json")
     dataS=gpd.read_file("undersampleRW_zerostreet.json")
@@ -36,7 +37,7 @@ def data_all():
     return(dataRSB, dataS, dataRW, allmap)
 
 dataRSB, dataS, dataRW, allmap=data_all()
-@st.experimental_memo(suppress_st_warning=True)
+
 def generate_localMap(c):
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     st.write(rw_geom[list(dataRW.columns)[1:5]])

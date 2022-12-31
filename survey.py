@@ -72,7 +72,7 @@ def generate_localMap(c):
                 base=base+f"{y},{x}/"
                 if len(selection)==0:
                     st.write(f"[link to ungated strt: {g}]({base})")
-                elif len(selection)==10:
+                elif len(selection)==6:
                     break
                 else:
                     pol=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries([polygon]), crs=line_inside.crs))

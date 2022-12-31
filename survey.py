@@ -43,14 +43,13 @@ if  left.button("clear cache"):
 
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
-    st.write(dataRW.index)
     #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
-        pts_inside=gpd.clip(dataRSB, dataRW.query(f"unique_no_RW=={c}"))[["geometry"]]
-        line_inside=gpd.clip(dataS, dataRW.query(f"unique_no_RW=={c}"))[["geometry"]]
-        m=dataRW.query(f"unique_no_RW=={c}")[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw", 
-            #style_kwds={"fill":False}
-            )
+        rw_geom=dataRW.query(f"unique_no_RW=={c}")
+        st.write(rw_geom)
+        pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
+        line_inside=gpd.clip(dataS, rw_geom)[["geometry"]]
+        m=rw_geom[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw")
         if len(pts_inside)>0:
             pts_inside.geometry=project_gdf(pts_inside).buffer(10).to_crs(pts_inside.crs).geometry
             m=pts_inside.explore(m=m, color="red", name="pts")

@@ -58,9 +58,12 @@ if genre == "rw":
                 line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
         else:
             st.write(f"no recorded points inside RWs in unique_no_RW {c}")
-
+        place=st.empty()
+        left, space, right=place.columns([1,5,1])
         place3=st.empty()
         left3, space3, righ3=place3.columns([1,5,1])
+
+        
         if len(line_inside)>0:
             line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
             m=line_inside.explore( m=m, color="grey", name="street")
@@ -86,8 +89,7 @@ if genre == "rw":
         
         
         folium.LayerControl().add_to(m)
-        place=st.empty()
-        left, space, right=place.columns([1,5,1])
+        
         with space.expander("map", True):
                 folium_static(m,width=280, height=400)
         place2=st.empty()

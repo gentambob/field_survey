@@ -72,6 +72,7 @@ def generate_localMap(c):
                 base=base+f"{y},{x}/"
                 if len(selection)==0:
                     st.write(f"[link to ungated strt: {g}]({base})")
+                    selection.append(polygon)
                 elif len(selection)==10:
                     break
                 else:
@@ -81,9 +82,10 @@ def generate_localMap(c):
                     mind=geoser.distance(pol).min()
                     if mind>50:
                         st.write(f"[link to ungated strt: {g}]({base})")
+                        selection.append(polygon)
 
 
-                selection.append(polygon)
+                
         gd=gpd.GeoSeries(selection)
         m=gd.explore(m=m, color="red", name="street selected")
     else:

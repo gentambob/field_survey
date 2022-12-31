@@ -46,7 +46,7 @@ if genre == "rw":
     #@st.cache(suppress_st_warning=True,allow_output_mutation=True) 
     def generate_localMap(c):
         rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
-        st.write(rw_geom[list(dataRW.columns)[:5]])
+        st.write(rw_geom[list(dataRW.columns)[1:5]])
         pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
         line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
         m=rw_geom[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw")

@@ -63,6 +63,7 @@ def generate_localMap(c):
         m=line_inside.explore( m=m, color="grey", name="street")
         gd=line_inside.sort_values("len",ascending=False).geometry
         selection=[]
+        num=0
         with space3.expander("route"):
             for g, polygon in enumerate(gd):
                 x=polygon.centroid.x
@@ -70,7 +71,8 @@ def generate_localMap(c):
                 base="https://www.google.com/maps/dir//"
                 base=base+f"{y},{x}/"
                 if len(selection)==0:
-                    st.write(f"[link to ungated strt: {g}]({base})")
+                    st.write(f"[link to ungated strt: {num}]({base})")
+                    num=num+1
                     selection.append(polygon)
                 elif len(selection)>10:
                     break
@@ -80,7 +82,8 @@ def generate_localMap(c):
                     geoser=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries(selection), crs=line_inside.crs))
                     mind=geoser.distance(pol).min()
                     if mind>50:
-                        st.write(f"[link to ungated strt: {g}]({base})")
+                        st.write(f"[link to ungated strt: {num}]({base})")
+                        num=num+1
                         selection.append(polygon)
 
 

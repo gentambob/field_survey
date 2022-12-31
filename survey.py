@@ -48,7 +48,7 @@ if genre == "rw":
         rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
         st.write(rw_geom[list(dataRW.columns)[:5]])
         pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
-        line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]
+        line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
         m=rw_geom[["geometry", "unique_no_RW", "KEPADATAN"]].explore(name="rw")
         if len(pts_inside)>0:
             pts_inside.geometry=project_gdf(pts_inside).buffer(10).to_crs(pts_inside.crs).geometry

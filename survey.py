@@ -75,8 +75,7 @@ def generate_localMap(c):
                 elif len(selection)==10:
                     break
                 else:
-                    pol=project_gdf(gpd.GeoSeries(polygon).set_crs('EPSG:4326')).reset_index()
-                    st.write(pol)
+                    pol=project_gdf(gpd.GeoSeries([polygon]).set_crs('EPSG:4326')).reset_index()
                     pol=pol.geometry.values[0]
                     geoser=project_gdf(gpd.GeoSeries(selection).set_crs('EPSG:4326'))
                     mind=geoser.distance(pol).min()

@@ -107,6 +107,7 @@ if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
     m, googledirection,message, display=generate_localMap(c)
     st.write(display)
+    st.write(message)
     
     place=st.empty()
     left, space, right=place.columns([1,5,1])
@@ -115,11 +116,12 @@ if genre == "rw":
     place2=st.empty()
     left2, space2, righ2=place2.columns([1,5,1])
     with space.expander("map", True):
-            folium_static(m,width=280, height=400)
+        folium_static(m,width=280, height=400)
     
     with space3.expander("route"):
-        for g in googledirection:
-            st.write(g)
+        st.write(googledirection)
+        #for g in googledirection:
+        #    st.write(g)
 
     with space2.expander("input form"):
         form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="100%" height="1600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'

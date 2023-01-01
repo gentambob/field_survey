@@ -40,7 +40,6 @@ dataRSB, dataS, dataRW, allmap=data_all()
 def generate_localMap(c):
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     display=rw_geom[list(dataRW.columns)[1:5]]
-    st.write(display)
     pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
     line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
     m=rw_geom[["geometry", "unique_no_RW"]].explore(name="rw")
@@ -95,7 +94,7 @@ def generate_localMap(c):
 
     folium.LayerControl().add_to(m)
 
-    return(m, googledirection,message)
+    return(m, googledirection,message, display)
 
 
 left, space1, s,right=st.columns(4)
@@ -106,7 +105,8 @@ if  left.button("clear cache"):
     st.experimental_rerun()
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
-    m, googledirection,message=generate_localMap(c)
+    m, googledirection,message, display=generate_localMap(c)
+    st.write(display)
     place=st.empty()
     left, space, right=place.columns([1,5,1])
     place3=st.empty()

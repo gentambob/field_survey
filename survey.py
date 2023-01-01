@@ -60,7 +60,7 @@ def generate_localMap(c):
 
     if len(line_inside)>0:
         line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
-        m=line_inside.explore( m=m, color="grey", name="street")
+        m=line_inside[["geometry"]].explore( m=m, color="grey", name="street")
 
 
         ## a pretty cool algrthm for size-len wise street filtering for field survey !

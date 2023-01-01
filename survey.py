@@ -92,8 +92,8 @@ def generate_localMap(c):
 
 
                 
-        gd=gpd.GeoSeries(selection)
-        m=gd.explore(m=m, color="red", name="street selected")
+        gd=gpd.GeoSeries(selection).reset_index()
+        m=gd.explore(m=m, color="index", name="street selected")
     else:
         with space3.expander("route"):
             for polygon in rw_geom.geometry:

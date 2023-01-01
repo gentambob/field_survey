@@ -41,8 +41,6 @@ dataRSB, dataS, dataRW, allmap=data_all()
 def generate_localMap(c):
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     display=rw_geom[list(dataRW.columns)[1:5]]
-    for d in display.columns:
-        display[d]=display[d].astype(float).apply(lambda x: round(x, 3))
     st.write(display)
     pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
     line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
@@ -88,7 +86,7 @@ def generate_localMap(c):
                     pol=pol.geometry.values[0]
                     geoser=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries(selection), crs=line_inside.crs))
                     mind=geoser.distance(pol).min()
-                    if mind>15: #at least 15 meters away from any selected street 
+                    if mind>10: #at least 10 meters away from any selected street 
                         st.write(f"[link to ungated strt: {num}]({base})")
                         num=num+1
                         selection.append(polygon)

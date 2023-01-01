@@ -40,7 +40,10 @@ dataRSB, dataS, dataRW, allmap=data_all()
 
 def generate_localMap(c):
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
-    st.write(rw_geom[list(dataRW.columns)[1:5]])
+    display=rw_geom[list(dataRW.columns)[1:5]]
+    for d in display.columns:
+        display[d]=display[d].astype(float).apply(lambda x: round(x, 3))
+    st.write(display)
     pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
     line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
     m=rw_geom[["geometry", "unique_no_RW"]].explore(name="rw")

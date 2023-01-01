@@ -37,7 +37,7 @@ def data_all():
     return(dataRSB, dataS, dataRW, allmap)
 
 dataRSB, dataS, dataRW, allmap=data_all()
-def local_map_canvas(c):
+def generate_localMap(c):
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     display=rw_geom[list(dataRW.columns)[1:5]]
     st.write(display)

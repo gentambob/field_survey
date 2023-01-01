@@ -31,7 +31,7 @@ def data_all():
     dataS=gpd.read_file("undersampleRW_zerostreet.json")
     dataRW=gpd.read_file("rwtarget.json")
     X=[[xs, ys] for xs, ys in zip(dataRW["x"],dataRW["y"])]
-    clustering = SpectralClustering(n_clusters=9, n_neighbors=3, assign_labels='cluster_qr',affinity="nearest_neighbors",random_state=0).fit(X)
+    clustering = SpectralClustering(n_clusters=8, n_neighbors=5, assign_labels='cluster_qr',affinity="nearest_neighbors",random_state=0).fit(X)
     dataRW["cluster"]=clustering.labels_
     allmap=dataRW[["cluster", "unique_no_RW", "geometry"]].explore("cluster", categorical=True, cmap="tab10")
     return(dataRSB, dataS, dataRW, allmap)

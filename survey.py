@@ -37,8 +37,7 @@ def data_all():
     return(dataRSB, dataS, dataRW, allmap)
 
 dataRSB, dataS, dataRW, allmap=data_all()
-
-def generate_localMap(c):
+def local_map_canvas(c):
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     display=rw_geom[list(dataRW.columns)[1:5]]
     st.write(display)
@@ -46,79 +45,57 @@ def generate_localMap(c):
     line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
     m=rw_geom[["geometry", "unique_no_RW"]].explore(name="rw")
     if len(pts_inside)>0:
+        message=f"{len(pts_inside)} recorded points inside RWs in unique_no_RW {c}"
         pts_inside.geometry=project_gdf(pts_inside).buffer(10).to_crs(pts_inside.crs).geometry
         m=pts_inside.explore(m=m, color="red", name="pts")
         omit_line=gpd.sjoin(pts_inside, line_inside)["index_right"]
         if len(omit_line)>0:
             line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
     else:
-        st.write(f"no recorded points inside RWs in unique_no_RW {c}")
-    place=st.empty()
-    left, space, right=place.columns([1,5,1])
-    place3=st.empty()
-    left3, space3, righ3=place3.columns([1,5,1])
+        message=f"no recorded points inside RWs in unique_no_RW {c}"
 
-
+    googledirection=[]
     if len(line_inside)>0:
         line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
         #m=line_inside[["geometry"]].explore( m=m, color="grey", name="street")
-
-
         ## a pretty cool algrthm for size-len wise street filtering for field survey !
         line_inside["newlen"]=line_inside.length
         gd=line_inside.sort_values("newlen",ascending=False).geometry
         selection=[]
         num=0
-        with space3.expander("route"):
-            for g, polygon in enumerate(gd):
-                x=polygon.centroid.x
-                y=polygon.centroid.y
-                base="https://www.google.com/maps/dir//"
-                base=base+f"{y},{x}/"
-                if len(selection)==0:
-                    st.write(f"[link to ungated strt: {num}]({base})")
+        for g, polygon in enumerate(gd):
+            x=polygon.centroid.x
+            y=polygon.centroid.y
+            base="https://www.google.com/maps/dir//"
+            base=base+f"{y},{x}/"
+            if len(selection)==0:
+                st.write(f"[link to ungated strt: {num}]({base})")
+                num=num+1
+                selection.append(polygon)
+            elif len(selection)>9:
+                break
+            else:
+                pol=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries([polygon]), crs=line_inside.crs))
+                pol=pol.geometry.values[0]
+                geoser=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries(selection), crs=line_inside.crs))
+                mind=geoser.distance(pol).min()
+                if mind>10: #at least 10 meters away from any selected street 
+                    googledirection.append(f"[link to ungated strt: {num}]({base})")
                     num=num+1
-                    selection.append(polygon)
-                elif len(selection)>9:
-                    break
-                else:
-                    pol=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries([polygon]), crs=line_inside.crs))
-                    pol=pol.geometry.values[0]
-                    geoser=project_gdf(gpd.GeoDataFrame(geometry=gpd.GeoSeries(selection), crs=line_inside.crs))
-                    mind=geoser.distance(pol).min()
-                    if mind>10: #at least 10 meters away from any selected street 
-                        st.write(f"[link to ungated strt: {num}]({base})")
-                        num=num+1
-                        selection.append(polygon)
-
-
-                
+                    selection.append(polygon)   
         gd=gpd.GeoSeries(selection).reset_index()
         m=gd.explore(m=m, column="index", cmap="Accent", name="street selected")
     else:
-        with space3.expander("route"):
-            for polygon in rw_geom.geometry:
-                x=polygon.centroid.x
-                y=polygon.centroid.y
-                base="https://www.google.com/maps/dir//"
-                base=base+f"{y},{x}/"
-                st.write(f"[link to ungated strt: {c}]({base})")
-  
-    
-    
-    
+        for polygon in rw_geom.geometry:
+            x=polygon.centroid.x
+            y=polygon.centroid.y
+            base="https://www.google.com/maps/dir//"
+            base=base+f"{y},{x}/"
+            googledirection.append(f"[link to ungated strt: {c}]({base})")
+
     folium.LayerControl().add_to(m)
-    
-    with space.expander("map", True):
-            folium_static(m,width=280, height=400)
-    place2=st.empty()
-    left2, space2, righ2=place2.columns([1,5,1])
-    with space2.expander("input form"):
-        form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="100%" height="1600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
-        st.markdown(form, unsafe_allow_html=True)
-    
 
-
+    return(m, googledirection,message)
 
 
 left, space1, s,right=st.columns(4)
@@ -129,7 +106,22 @@ if  left.button("clear cache"):
     st.experimental_rerun()
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
-    generate_localMap(c)
+    m, googledirection,message=generate_localMap(c)
+    place=st.empty()
+    left, space, right=place.columns([1,5,1])
+    place3=st.empty()
+    left3, space3, righ3=place3.columns([1,5,1])
+
+    with space.expander("map", True):
+            folium_static(m,width=280, height=400)
+    place2=st.empty()
+    left2, space2, righ2=place2.columns([1,5,1])
+    with space2.expander("input form"):
+        form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="100%" height="1600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
+        st.markdown(form, unsafe_allow_html=True)
+    with space3.expander("route"):
+        for g in googledirection:
+            st.write(g)
     st.stop()
 if genre =="all map":
     st.title("all map")

@@ -127,7 +127,7 @@ if genre == "rw":
     m, googledirection,message, display=generate_localMap(c)
     st.title(message)
     with space:
-        st.write(display.T.iloc[1: , :])
+        st.write(display.T)
         
     
     with space1.expander("map", True):

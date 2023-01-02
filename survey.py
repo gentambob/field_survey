@@ -49,7 +49,7 @@ def generate_localMap(c):
     if len(pts_inside)>0:
         message=f"{len(pts_inside)} recorded points inside RWs in unique_no_RW {c}"
         pts_inside.geometry=project_gdf(pts_inside).buffer(10).to_crs(pts_inside.crs).geometry
-        m=pts_inside.explore("index", m=m, color="red", name="pts")
+        m=pts_inside.explore(m=m, color="red", name="pts")
         omit_line=gpd.sjoin(pts_inside, line_inside)["index_right"]
         if len(omit_line)>0:
             line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
@@ -95,7 +95,7 @@ def generate_localMap(c):
                     num=num+1
                     selection.append(polygon)   
         gd=gpd.GeoSeries(selection).reset_index()
-        m=gd.explore(m=m, column="index", cmap="Accent", name="street selected")
+        m=gd.explore(m=m, column="index", cmap="Accent", categorical=True, name="street selected")
     else:
         for polygon in rw_geom.geometry:
             x=polygon.centroid.x

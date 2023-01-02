@@ -60,6 +60,7 @@ def generate_localMap(c):
             base="https://www.google.com/maps/dir//"
             base=base+f"{y},{x}/"
             googledirection.append(f"[PLINKS(recorded pts): {g}]({base})")
+        googledirection.append("\n--------------------------\n")
 
     else:
         message=f"no recorded points inside RWs in unique_no_RW {c}"

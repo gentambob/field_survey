@@ -48,7 +48,7 @@ def generate_localMap(c):
     line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
     m=rw_geom[["geometry", "unique_no_RW"]].explore(name="rw")
     if len(pts_inside)>0:
-        message=f"{len(pts_inside)} recorded points inside RWs in unique_no_RW {c}"
+        message=f"{len(pts_inside)} recorded points inside {c}"
         pts_inside.geometry=project_gdf(pts_inside).buffer(10).to_crs(pts_inside.crs).geometry
         m=pts_inside.explore(m=m, color="red", name="pts")
         omit_line=gpd.sjoin(pts_inside, line_inside)["index_right"]
@@ -64,7 +64,7 @@ def generate_localMap(c):
         googledirection.append("\n--------------------------\n")
 
     else:
-        message=f"no recorded points inside RWs in unique_no_RW {c}"
+        message=f"no recorded points inside {c}"
 
    
     if len(line_inside)>0:

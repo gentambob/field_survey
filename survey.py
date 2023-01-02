@@ -44,7 +44,7 @@ def generate_localMap(c):
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     display=rw_geom[list(dataRW.columns)[1:5]]
     pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
-    pts_inside["idx_pts"]=pts_inside["index"]
+    pts_inside["idx_pts"]=pts_inside.index
     line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
     m=rw_geom[["geometry", "unique_no_RW"]].explore(name="rw")
     if len(pts_inside)>0:

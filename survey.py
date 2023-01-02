@@ -125,12 +125,11 @@ if  left.button("clear cache"):
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
     m, googledirection,message, display=generate_localMap(c)
-    st.title(message)
     with space:
         st.write(display.T)
         
     
-    with space1.expander("map", True):
+    with space1.expander(message, True):
         folium_static(m,width=280, height=400)
     
     with space3.expander("route"):

@@ -110,9 +110,9 @@ def generate_localMap(c):
     return(m, googledirection,message, display)
 
 
-left, space1, s,right=st.columns(4)
+left, space, s,right=st.columns(4)
 place=st.empty()
-left, space, right=place.columns([1,5,1])
+left1, space1, right1=place.columns([1,5,1])
 place3=st.empty()
 left3, space3, righ3=place3.columns([1,5,1])
 place2=st.empty()

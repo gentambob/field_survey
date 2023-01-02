@@ -126,8 +126,9 @@ if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
     m, googledirection,message, display=generate_localMap(c)
     with space:
-        st.write(display.T)
         st.write(message)
+        st.write(display.T.iloc[1: , :])
+        
     
     with space1.expander("map", True):
         folium_static(m,width=280, height=400)

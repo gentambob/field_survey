@@ -40,22 +40,32 @@ dataRSB, dataS, dataRW, allmap=data_all()
 
 @st.experimental_singleton(suppress_st_warning=True)
 def generate_localMap(c):
+    googledirection=[]
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     display=rw_geom[list(dataRW.columns)[1:5]]
-    pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
+    pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]].index()
     line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
     m=rw_geom[["geometry", "unique_no_RW"]].explore(name="rw")
     if len(pts_inside)>0:
         message=f"{len(pts_inside)} recorded points inside RWs in unique_no_RW {c}"
         pts_inside.geometry=project_gdf(pts_inside).buffer(10).to_crs(pts_inside.crs).geometry
-        m=pts_inside.explore(m=m, color="red", name="pts")
+        m=pts_inside.explore("index", m=m, color="red", name="pts")
         omit_line=gpd.sjoin(pts_inside, line_inside)["index_right"]
         if len(omit_line)>0:
             line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
+
+        for g, polygon in enumerate(pts_inside):
+            x=polygon.centroid.x
+            y=polygon.centroid.y
+            base="https://www.google.com/maps/dir//"
+            base=base+f"{y},{x}/"
+            if len(selection)==0:
+                googledirection.append(f"[PLINKS(recorded pts): {g}]({base})")
+
     else:
         message=f"no recorded points inside RWs in unique_no_RW {c}"
 
-    googledirection=[]
+   
     if len(line_inside)>0:
         line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
         #m=line_inside[["geometry"]].explore( m=m, color="grey", name="street")

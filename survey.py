@@ -54,7 +54,6 @@ def generate_localMap(c):
         omit_line=gpd.sjoin(pts_inside, line_inside)["index_right"]
         if len(omit_line)>0:
             line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
-
         for g, polygon in zip(pts_inside["idx_pts"], pts_inside.geometry):
             x=polygon.centroid.x
             y=polygon.centroid.y
@@ -65,11 +64,8 @@ def generate_localMap(c):
 
     else:
         message=f"no recorded points inside {c}"
-
-   
     if len(line_inside)>0:
         line_inside.geometry=project_gdf(line_inside).buffer(0.5).to_crs(line_inside.crs).geometry
-        #m=line_inside[["geometry"]].explore( m=m, color="grey", name="street")
         ## a pretty cool algrthm for size-len wise street filtering for field survey !
         line_inside["newlen"]=project_gdf(line_inside).length
         gd=line_inside.sort_values("newlen",ascending=False).geometry
@@ -127,19 +123,14 @@ if genre == "rw":
     m, googledirection,message, display=generate_localMap(c)
     with space:
         st.write(display.T)
-        
-    
     with space1.expander(message, True):
         folium_static(m,width=280, height=400)
-    
     with space3.expander("route"):
         for g in googledirection:
             st.write(g)
-
     with space2.expander("input form"):
         form='<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGxtpiSVJ2hHzMeqb7HikVtzNYy1kRZLlWg1BW_3aQs1xVew/viewform?embedded=true" width="100%" height="1600" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>'
         st.markdown(form, unsafe_allow_html=True)
-    
     st.stop()
 if genre =="all map":
     st.title("all map")

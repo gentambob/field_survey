@@ -43,7 +43,8 @@ def generate_localMap(c):
     googledirection=[]
     rw_geom=dataRW[dataRW["unique_no_RW"].astype(str)==str(c)]
     display=rw_geom[list(dataRW.columns)[1:5]]
-    pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]].reset_index()
+    pts_inside=gpd.clip(dataRSB, rw_geom)[["geometry"]]
+    pts_inside["idx_pts"]=pts_inside["index"]
     line_inside=gpd.clip(dataS, rw_geom)[[c for c in dataS.columns if c !="index_right"]]
     m=rw_geom[["geometry", "unique_no_RW"]].explore(name="rw")
     if len(pts_inside)>0:
@@ -54,7 +55,7 @@ def generate_localMap(c):
         if len(omit_line)>0:
             line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
 
-        for g, polygon in enumerate(pts_inside.geometry):
+        for g, polygon in zip(pts_inside["idx_pts"], pts_inside.geometry):
             x=polygon.centroid.x
             y=polygon.centroid.y
             base="https://www.google.com/maps/dir//"

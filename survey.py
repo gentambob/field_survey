@@ -126,7 +126,7 @@ if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
     m, googledirection,message, display=generate_localMap(c)
     with space:
-        st.write(display)
+        st.write(display.T)
         st.write(message)
     
     with space1.expander("map", True):

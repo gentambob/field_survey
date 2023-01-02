@@ -111,6 +111,12 @@ def generate_localMap(c):
 
 
 left, space1, s,right=st.columns(4)
+ place=st.empty()
+left, space, right=place.columns([1,5,1])
+place3=st.empty()
+left3, space3, righ3=place3.columns([1,5,1])
+place2=st.empty()
+left2, space2, righ2=place2.columns([1,5,1])
 genre = right.radio("Mode",('rw', 'all map'))
 
 if  left.button("clear cache"):
@@ -122,12 +128,6 @@ if genre == "rw":
     st.write(display)
     st.write(message)
     
-    place=st.empty()
-    left, space, right=place.columns([1,5,1])
-    place3=st.empty()
-    left3, space3, righ3=place3.columns([1,5,1])
-    place2=st.empty()
-    left2, space2, righ2=place2.columns([1,5,1])
     with space.expander("map", True):
         folium_static(m,width=280, height=400)
     
@@ -142,7 +142,8 @@ if genre == "rw":
     st.stop()
 if genre =="all map":
     st.title("all map")
-    folium_static(allmap,width=400, height=400)
+    with space:
+        folium_static(allmap,width=400, height=400)
     st.stop()
 
 

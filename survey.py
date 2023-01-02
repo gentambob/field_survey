@@ -54,7 +54,7 @@ def generate_localMap(c):
         if len(omit_line)>0:
             line_inside=line_inside.loc[~line_inside.index.isin(omit_line)]
 
-        for g, polygon in enumerate(pts_inside):
+        for g, polygon in enumerate(pts_inside.geometry):
             x=polygon.centroid.x
             y=polygon.centroid.y
             base="https://www.google.com/maps/dir//"

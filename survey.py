@@ -59,8 +59,7 @@ def generate_localMap(c):
             y=polygon.centroid.y
             base="https://www.google.com/maps/dir//"
             base=base+f"{y},{x}/"
-            if len(selection)==0:
-                googledirection.append(f"[PLINKS(recorded pts): {g}]({base})")
+            googledirection.append(f"[PLINKS(recorded pts): {g}]({base})")
 
     else:
         message=f"no recorded points inside RWs in unique_no_RW {c}"

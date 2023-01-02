@@ -111,7 +111,7 @@ def generate_localMap(c):
 
 
 left, space1, s,right=st.columns(4)
- place=st.empty()
+place=st.empty()
 left, space, right=place.columns([1,5,1])
 place3=st.empty()
 left3, space3, righ3=place3.columns([1,5,1])

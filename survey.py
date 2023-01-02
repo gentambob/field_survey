@@ -125,8 +125,8 @@ if  left.button("clear cache"):
 if genre == "rw":
     c=st.sidebar.selectbox("rw (targets)",  sorted(list(dataRW["unique_no_RW"].unique())))
     m, googledirection,message, display=generate_localMap(c)
+    st.header(message)
     with space:
-        st.write(message)
         st.write(display.T.iloc[1: , :])
         
     
